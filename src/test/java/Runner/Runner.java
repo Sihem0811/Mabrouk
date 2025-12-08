@@ -20,8 +20,10 @@ import io.cucumber.junit.CucumberOptions;
 
 		glue="StepDef",
 
-		plugin = {"pretty", "html:target/Cucumber-report.html",
-				     "json:target/cucumber-report.json" //
+		plugin = {"pretty",
+				  "html:target/Cucumber-report.html",
+				  "json:target/cucumber-report.json",
+				  "xml:target/cucumber-report.xml"
 				 }
 		)
 public class Runner {
