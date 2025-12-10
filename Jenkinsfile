@@ -8,14 +8,14 @@ pipeline {
     environment {
         CUCUMBER_JSON = 'target/cucumber.json'
         CUCUMBER_HTML = 'target/cucumber-report.html'
-        
     }
 
     stages {
+
         stage('Checkout') {
-           steps {
+            steps {
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']],
+                    branches: [[name: '*/main']], 
                     userRemoteConfigs: [[url: 'https://github.com/Sihem0811/Mabrouk.git']]
                 ])
             }
@@ -29,7 +29,6 @@ pipeline {
 
         stage('Run Cucumber Tests') {
             steps {
-                // Run tests and generate Allure results
                 sh 'mvn test'
             }
         }
@@ -40,30 +39,28 @@ pipeline {
             }
         }
 
-    //     stage('Allure Report') {
-    //         steps {
-    //             allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-    //         }
-    //     }
-    }
-
-    post {
-    always {
-        script {
-            if (fileExists(CUCUMBER_JSON)) {
-                // Publish Cucumber JSON report
-                cucumber fileIncludePattern: CUCUMBER_JSON
-            } else {
-                echo "Cucumber report JSON not found."
+        /*
+        stage('Allure Report') {
+            steps {
+                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
             }
         }
-        // Publish JUnit test result reports
-        junit 'target/surefire-reports/**/*.xml'
+        */
 
-        // Publish Allure report
-       // allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
+    }  // <-- FIN DU STAGES
+
+    post {
+        always {
+            script {
+                if (fileExists(CUCUMBER_JSON)) {
+                    cucumber fileIncludePattern: CUCUMBER_JSON
+                } else {
+                    echo "Cucumber report JSON not found."
+                }
+            }
+
+            junit 'target/surefire-reports/**/*.xml'
+        }
     }
-}
 
-}
-}
+}  // <-- FIN DU PIPELINE
