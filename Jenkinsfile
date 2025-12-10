@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']], 
+                    branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: 'https://github.com/Sihem0811/Mabrouk.git']]
                 ])
             }
@@ -23,13 +23,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'mvn clean install -U -DskipTests'
+                bat 'mvn clean install -U -DskipTests'
             }
         }
 
         stage('Run Cucumber Tests') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
@@ -38,16 +38,7 @@ pipeline {
                 archiveArtifacts artifacts: "${CUCUMBER_JSON}, ${CUCUMBER_HTML},/**", allowEmptyArchive: false
             }
         }
-
-        /*
-        stage('Allure Report') {
-            steps {
-                allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
-            }
-        }
-        */
-
-    }  // <-- FIN DU STAGES
+    }
 
     post {
         always {
@@ -62,5 +53,4 @@ pipeline {
             junit 'target/surefire-reports/**/*.xml'
         }
     }
-
-}  // <-- FIN DU PIPELINE
+}
