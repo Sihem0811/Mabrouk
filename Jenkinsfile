@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
            steps {
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/master']],
+                    branches: [[name: '*/main']],
                     userRemoteConfigs: [[url: 'https://github.com/Sihem0811/Mabrouk.git']]
                 ])
             }
@@ -45,7 +45,7 @@ pipeline {
     //             allure includeProperties: false, jdk: '', results: [[path: "${ALLURE_RESULTS}"]]
     //         }
     //     }
-    // }
+    }
 
     post {
     always {
