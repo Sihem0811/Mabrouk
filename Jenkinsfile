@@ -41,16 +41,18 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                if (fileExists(CUCUMBER_JSON)) {
-                    cucumber fileIncludePattern: CUCUMBER_JSON
-                } else {
-                    echo "Cucumber report JSON not found."
-                }
+    always {
+        script {
+            catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                cucumber(
+                    jsonReportDirectory: 'target',
+                    fileIncludePattern: '**/cucumber.json'
+                )
             }
-
-            junit 'target/surefire-reports/**/*.xml'
         }
+
+        junit allowEmptyResults: true, testResults: 'target/surefire-reports/**/*.xml'
     }
+}
+
 }
